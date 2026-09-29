@@ -9,10 +9,27 @@ import json
 from datetime import datetime
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(CURRENT_DIR, 'safescan.db')
+
+def get_db_path() -> str:
+    """
+    Returns appropriate writable database path.
+    In serverless environments like Vercel, the source directory is read-only,
+    so we route the SQLite database file to /tmp/safescan.db.
+    """
+    if os.environ.get('VERCEL') or not os.access(CURRENT_DIR, os.W_OK):
+        tmp_db = os.path.join('/tmp', 'safescan.db')
+        source_db = os.path.join(CURRENT_DIR, 'safescan.db')
+        if not os.path.exists(tmp_db) and os.path.exists(source_db):
+            import shutil
+            try:
+                shutil.copy2(source_db, tmp_db)
+            except Exception:
+                pass
+        return tmp_db
+    return os.path.join(CURRENT_DIR, 'safescan.db')
 
 def get_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(get_db_path())
     conn.row_factory = sqlite3.Row
     return conn
 

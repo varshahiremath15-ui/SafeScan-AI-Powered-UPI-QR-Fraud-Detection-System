@@ -20,7 +20,14 @@ from feature_extraction import extract_features
 from predict import analyze_payment_input, get_model
 from database import init_db, insert_scan, get_recent_scans, get_scan_by_id, get_scan_statistics
 
-app = Flask(__name__)
+TEMPLATES_DIR = os.path.join(CURRENT_DIR, 'templates')
+STATIC_DIR = os.path.join(CURRENT_DIR, 'static')
+
+app = Flask(
+    __name__,
+    template_folder=TEMPLATES_DIR,
+    static_folder=STATIC_DIR
+)
 app.secret_key = os.environ.get('SECRET_KEY', 'safescan-cyber-security-secret-key-2024')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB upload limit
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'}
