@@ -1,0 +1,6 @@
+{
+  "name": "SafeScan – AI-Powered UPI/QR Fraud Detection System",
+  "description": "SafeScan is an AI-powered UPI and QR code fraud detection web platform using scikit-learn Random Forest classification to evaluate payment risk before proceeding.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

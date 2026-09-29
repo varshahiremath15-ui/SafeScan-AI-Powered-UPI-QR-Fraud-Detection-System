@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit History – SafeScan</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-safescan">
+    <div class="container">
+      <a class="navbar-brand navbar-brand-logo" href="{{ url_for('index') }}">
+        <div class="navbar-brand-shield">
+          <i class="bi bi-shield-check"></i>
+        </div>
+        <span>SafeScan</span>
+      </a>
+      <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="{{ url_for('index') }}">
+              <i class="bi bi-house-door me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="{{ url_for('analyze') }}">
+              <i class="bi bi-search me-1"></i> Analyze Payment
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom active" href="{{ url_for('history') }}">
+              <i class="bi bi-clock-history me-1"></i> Audit History
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="bg-white border-bottom py-4 mb-4">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <h2 class="fw-bold mb-1">Payment Security Audit Log</h2>
+          <p class="text-muted mb-0">Persistent audit records of all scanned UPI URIs, URLs, and QR code transactions stored in SQLite.</p>
+        </div>
+        <div>
+          <a href="{{ url_for('analyze') }}" class="btn btn-primary-action">
+            <i class="bi bi-plus-lg me-1"></i> New Security Scan
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container mb-5">
+
+    <!-- Metrics Stat Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card-security p-3">
+          <div class="text-muted small text-uppercase fw-bold">Total Scans Audited</div>
+          <div class="fs-3 fw-bold text-dark mt-1">{{ stats.total }}</div>
+          <div class="text-secondary small mt-1"><i class="bi bi-database text-primary"></i> SQLite Persistent</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card-security p-3">
+          <div class="text-muted small text-uppercase fw-bold">Safe Transactions</div>
+          <div class="fs-3 fw-bold text-success mt-1">{{ stats.safe }}</div>
+          <div class="text-secondary small mt-1"><i class="bi bi-check-circle-fill text-success"></i> Score 0–30</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card-security p-3">
+          <div class="text-muted small text-uppercase fw-bold">Suspicious Links</div>
+          <div class="fs-3 fw-bold text-warning mt-1">{{ stats.suspicious }}</div>
+          <div class="text-secondary small mt-1"><i class="bi bi-exclamation-triangle-fill text-warning"></i> Score 31–70</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card-security p-3">
+          <div class="text-muted small text-uppercase fw-bold">High Risk / Fraud</div>
+          <div class="fs-3 fw-bold text-danger mt-1">{{ stats.high_risk }}</div>
+          <div class="text-secondary small mt-1"><i class="bi bi-shield-x text-danger"></i> Score 71–100</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Table Card -->
+    <div class="card-security overflow-hidden">
+      <div class="p-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 bg-light">
+        <div class="fw-bold">
+          <i class="bi bi-list-task me-1 text-primary"></i> Recorded Audit Logs
+        </div>
+        <div class="w-100 w-md-auto" style="max-width: 320px;">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input type="text" id="history-search" class="form-control" placeholder="Search by VPA, URL, or status...">
+          </div>
+        </div>
+      </div>
+
+      {% if scans %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="history-table">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 80px;">Audit ID</th>
+              <th>Target Payload / URI</th>
+              <th style="width: 140px;">Risk Score</th>
+              <th style="width: 130px;">Classification</th>
+              <th>Key Observations</th>
+              <th style="width: 160px;">Timestamp</th>
+              <th style="width: 100px;" class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for scan in scans %}
+            <tr>
+              <td class="fw-bold text-muted">#{{ scan.id }}</td>
+              <td>
+                <div class="font-monospace small text-truncate" style="max-width: 300px;" title="{{ scan.input_data }}">
+                  {{ scan.input_data }}
+                </div>
+                {% if scan.features.parsed_vpa %}
+                  <span class="badge bg-light text-secondary border font-monospace mt-1" style="font-size: 0.72rem;">
+                    VPA: {{ scan.features.parsed_vpa }}
+                  </span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="progress flex-grow-1" style="height: 6px;">
+                    <div 
+                      class="progress-bar {% if scan.risk_score <= 30 %}bg-success{% elif scan.risk_score <= 70 %}bg-warning{% else %}bg-danger{% endif %}" 
+                      style="width: {{ scan.risk_score }}%;"
+                    ></div>
+                  </div>
+                  <span class="fw-bold small {% if scan.risk_score <= 30 %}text-success{% elif scan.risk_score <= 70 %}text-warning{% else %}text-danger{% endif %}">
+                    {{ scan.risk_score }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                {% if scan.prediction == 'SAFE' %}
+                  <span class="badge bg-success">SAFE</span>
+                {% elif scan.prediction == 'SUSPICIOUS' %}
+                  <span class="badge bg-warning text-dark">SUSPICIOUS</span>
+                {% else %}
+                  <span class="badge bg-danger">HIGH RISK</span>
+                {% endif %}
+              </td>
+              <td>
+                <span class="text-muted small">
+                  {% if scan.features.reasons %}
+                    {{ scan.features.reasons[0] }}
+                  {% else %}
+                    Evaluated against 19 security features.
+                  {% endif %}
+                </span>
+              </td>
+              <td class="text-muted small">
+                {{ scan.created_at }}
+              </td>
+              <td class="text-end">
+                <a href="{{ url_for('result', scan_id=scan.id) }}" class="btn btn-sm btn-outline-secondary">
+                  View <i class="bi bi-chevron-right ms-1"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-5 text-center">
+        <i class="bi bi-shield-slash fs-1 text-muted mb-2 d-block"></i>
+        <h5 class="fw-bold text-dark">No Scans Recorded Yet</h5>
+        <p class="text-muted small">Analyze your first UPI payment link or QR code to build the audit history.</p>
+        <a href="{{ url_for('analyze') }}" class="btn btn-primary-action btn-sm">
+          Run First Scan
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container text-center text-muted small">
+      SafeScan Security System &bull; SQLite Audit Store
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+/* ==========================================================================
+   SafeScan – Cybersecurity & UPI Fraud Detection System Stylesheet
+   ========================================================================== */
+
+:root {
+  --primary-navy: #0f172a;
+  --secondary-navy: #1e293b;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-hover: #0891b2;
+  --safe-green: #10b981;
+  --safe-green-bg: #ecfdf5;
+  --suspicious-amber: #f59e0b;
+  --suspicious-amber-bg: #fffbeb;
+  --fraud-red: #ef4444;
+  --fraud-red-bg: #fef2f2;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --card-bg: #ffffff;
+  --app-bg: #f8fafc;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--app-bg);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar-safescan {
+  background-color: var(--primary-navy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 1rem;
+}
+
+.navbar-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #ffffff !important;
+  letter-spacing: -0.02em;
+}
+
+.navbar-brand-shield {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--accent-cyan), #3b82f6);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.nav-link-custom {
+  color: #cbd5e1 !important;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.nav-link-custom:hover,
+.nav-link-custom.active {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(180deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+  color: #ffffff;
+  padding: 3.5rem 1rem 4rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #38bdf8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Cards & Layout */
+.card-security {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-security-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+.card-header-clean {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Pipeline Step Cards */
+.pipeline-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: var(--primary-navy);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Upload Dropzone */
+.qr-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 2.25rem 1.5rem;
+  text-align: center;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qr-dropzone:hover,
+.qr-dropzone.dragover {
+  border-color: var(--accent-cyan);
+  background-color: #f0fdfa;
+}
+
+.qr-dropzone-icon {
+  font-size: 2.5rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+}
+
+/* Risk Score Gauge & Badges */
+.risk-meter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.risk-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid;
+  position: relative;
+  background-color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.risk-circle.safe {
+  border-color: var(--safe-green);
+  color: var(--safe-green);
+}
+
+.risk-circle.suspicious {
+  border-color: var(--suspicious-amber);
+  color: var(--suspicious-amber);
+}
+
+.risk-circle.danger {
+  border-color: var(--fraud-red);
+  color: var(--fraud-red);
+}
+
+.risk-circle-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.risk-circle-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge-status-safe {
+  background-color: var(--safe-green-bg);
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.badge-status-suspicious {
+  background-color: var(--suspicious-amber-bg);
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.badge-status-danger {
+  background-color: var(--fraud-red-bg);
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Feature Table & Code Snippets */
+.mono-snippet {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  background-color: #0f172a;
+  color: #38bdf8;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  word-break: break-all;
+  font-size: 0.88rem;
+  border: 1px solid #1e293b;
+}
+
+.table-features th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+}
+
+.table-features td {
+  padding: 0.75rem 1rem;
+  font-size: 0.92rem;
+  vertical-align: middle;
+}
+
+/* Recommendation Box */
+.recommendation-box {
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.recommendation-safe {
+  background-color: var(--safe-green-bg);
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.recommendation-suspicious {
+  background-color: var(--suspicious-amber-bg);
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.recommendation-danger {
+  background-color: var(--fraud-red-bg);
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+/* Buttons */
+.btn-primary-action {
+  background-color: #0284c7;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-action:hover {
+  background-color: #0369a1;
+  color: #ffffff;
+}
+
+.btn-secondary-action {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-weight: 600;
+  padding: 0.7rem 1.25rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-action:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  background-color: var(--primary-navy);
+  color: #94a3b8;
+  padding: 2rem 0 1.5rem 0;
+  font-size: 0.88rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
